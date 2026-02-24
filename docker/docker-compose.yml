@@ -1,0 +1,19 @@
+services:
+  trtllm_triton:
+    image: nvcr.io/nvidia/tritonserver:25.10-trtllm-python-py3
+    container_name: triton_container
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ../workspace:/workspace
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "8002:8002"
+    stdin_open: true
+    tty: true
