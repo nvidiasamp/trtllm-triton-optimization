@@ -8,7 +8,7 @@ Optimization and deployment workflows for LLM inference using TensorRT-LLM and T
 2. Hugging Face からモデル取得  
 3. TensorRT-LLM でエンジンビルド  
 4. Triton Inference Server にデプロイ  
-5. （おまけ）精度・スループット評価方法  
+5. （おまけ）精度・スループット評価
 
 ---
 
@@ -172,7 +172,7 @@ bash /workspace/scripts/make_config.bash
 
 ---
 
-# 5. Triton Inference Server 起動
+## 4-2. Triton Inference Server 起動
 
 ```bash
 python /app/scripts/launch_triton_server.py \
@@ -182,7 +182,7 @@ python /app/scripts/launch_triton_server.py \
 
 ---
 
-# 6. 推論テスト（localhost）
+## 4-3. 推論テスト（localhost）
 
 ```bash
 curl -X POST localhost:8000/v2/models/ensemble/generate \
@@ -196,3 +196,39 @@ curl -X POST localhost:8000/v2/models/ensemble/generate \
 ```
 
 ---
+
+# 5. 精度・スループット評価
+
+精度評価
+
+```bash
+trtllm-eval \
+  --model /workspace/artifacts/engines/sq_engine_Llama3.1-8B-Instruct \
+  --tokenizer /workspace/artifacts/models/Llama-3.1-8B-Instruct \
+  --backend tensorrt mmlu
+```
+
+または：
+
+```bash
+bash /workspace/scripts/evaluate_accuracy.bash
+```
+
+---
+
+スループット評価
+
+```bash
+trtllm-bench \
+  --model /workspace/artifacts/models/Llama-3.1-8B-Instruct  throughput \
+  --engine_dir /workspace/artifacts/engines/awq_engine_Llama3.1-8B-Instruct \
+  --dataset /workspace/artifacts/synthetic_1024_1024.txt \
+  --concurrency 32 \
+  --backend tensorrt
+```
+
+または：
+
+```bash
+bash /workspace/scripts/benchmark_throughput.bash
+```
