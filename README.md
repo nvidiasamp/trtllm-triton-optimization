@@ -145,9 +145,7 @@ MAX_QUEUE_SIZE=32
 FILL_TEMPLATE_SCRIPT=/app/tools/fill_template.py
 DECOUPLED_MODE=false
 LOGITS_DATATYPE=TYPE_FP32
-```
 
-```bash
 python3 ${FILL_TEMPLATE_SCRIPT} -i ${MODEL_FOLDER}/ensemble/config.pbtxt \
   triton_max_batch_size:${TRITON_MAX_BATCH_SIZE},logits_datatype:${LOGITS_DATATYPE}
 
@@ -186,7 +184,6 @@ python /app/scripts/launch_triton_server.py \
 
 ```bash
 curl -X POST localhost:8000/v2/models/ensemble/generate \
-  -H "Content-Type: application/json" \
   -d '{
     "text_input": "What is machine learning?",
     "max_tokens": 24,
@@ -232,3 +229,7 @@ trtllm-bench \
 ```bash
 bash /workspace/scripts/benchmark_throughput.bash
 ```
+
+# ドキュメント
+- [TensorRT-LLM](https://nvidia.github.io/TensorRT-LLM/)
+- [Triton Inference Server](https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/index.html)
